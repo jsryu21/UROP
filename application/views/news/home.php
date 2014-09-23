@@ -82,16 +82,16 @@
 					}
 				}
 				echo '<div class="article_content"><span class="stripped_article_content">'.mb_substr(strip_tags($value->articles[0]->content), 0, 100).'…</span>';
-				$date = new DateTime($value->articles[0]->service_time);
-				echo '<span class="article_time">'.$date->format('m-d h:m').'</span>';
+				$service_time = new DateTime($value->articles[0]->service_time);
+				echo '<span class="article_time">'.$service_time->format('m-d h:m').'</span>';
 				echo '<span class="article_office text-danger">'.$value->articles[0]->office_name.'</span>';
 				echo '</div><!-- article_content -->';
 				echo '</div><!-- small_cluster_top_article -->';
 				for ($i = 1; $i < min(count($value->articles), $value->small_cluster_num_articles); ++$i) {
 					echo '<div class="small_cluster_article"><img src="http://static.news.naver.net/image/news/2009/ico_list_sub2.gif" /><small>';
 					echo '<a href="/index.php/news?big_category_name='.$big_category_name.'&medium_category_name='.$value->articles[$i]->medium_category_name.'&article_id='.$value->articles[$i]->id.'"><span class="article_title">'.$value->articles[$i]->title1.'</span></a>';
-					$date = new DateTime($value->articles[$i]->service_time);
-					echo '<span class="article_time">'.$date->format('m-d h:m').'</span>';
+					$service_time = new DateTime($value->articles[$i]->service_time);
+					echo '<span class="article_time">'.$service_time->format('m-d h:m').'</span>';
 					echo '<span class="article_office text-danger">'.$value->articles[$i]->office_name.'</span>';
 					echo '</small></div>';
 				}
@@ -124,8 +124,8 @@
 					}
 				}
 				echo '<div class="article_content"><span class="stripped_article_content">'.mb_substr(strip_tags($value->content), 0, 100).'…</span>';
-				$date = new DateTime($value->service_time);
-				echo '<span class="article_time">'.$date->format('m-d h:m').'</span>';
+				$service_time = new DateTime($value->service_time);
+				echo '<span class="article_time">'.$service_time->format('m-d h:m').'</span>';
 				echo '<span class="article_office text-danger">'.$value->office_name.'</span>';
 				echo '</div>';
 				echo '</div><!-- article -->';
@@ -134,47 +134,47 @@
 			if ($start_page != 1) {
 				$prev_page = $start_page - 1;
 				if ($small_category_name != FALSE) {
-					echo '<a href="/index.php/news?big_category_name='.$big_category_name.'&medium_category_name='.$medium_category_name.'&small_category_name='.$small_category_name.'&date='.$start_date.'&page='.$prev_page.'" class="text-muted">< 이전</a>';
+					echo '<a href="/index.php/news?big_category_name='.$big_category_name.'&medium_category_name='.$medium_category_name.'&small_category_name='.$small_category_name.'&date='.$date.'&page='.$prev_page.'" class="text-muted">< 이전</a>';
 				} else if ($medium_category_name != FALSE) {
-					echo '<a href="/index.php/news?big_category_name='.$big_category_name.'&medium_category_name='.$medium_category_name.'&date='.$start_date.'&page='.$prev_page.'" class="text-muted">< 이전</a>';
+					echo '<a href="/index.php/news?big_category_name='.$big_category_name.'&medium_category_name='.$medium_category_name.'&date='.$date.'&page='.$prev_page.'" class="text-muted">< 이전</a>';
 				} else {
-					echo '<a href="/index.php/news?big_category_name='.$big_category_name.'&date='.$start_date.'&page='.$prev_page.'" class="text-muted">< 이전</a>';
+					echo '<a href="/index.php/news?big_category_name='.$big_category_name.'&date='.$date.'&page='.$prev_page.'" class="text-muted">< 이전</a>';
 				}
 			}
 			$end_page = $start_page + (int)ceil(count($articles) / 25) - 1;
 			for ($p = $start_page; $p <= $end_page; ++$p) {
 				if ($p == $page) {
 					if ($small_category_name != FALSE) {
-						echo '<a href="/index.php/news?big_category_name='.$big_category_name.'&medium_category_name='.$medium_category_name.'&small_category_name='.$small_category_name.'&date='.$start_date.'&page='.$p.'" class="text-danger"><strong>'.$p.'</strong></a>';
+						echo '<a href="/index.php/news?big_category_name='.$big_category_name.'&medium_category_name='.$medium_category_name.'&small_category_name='.$small_category_name.'&date='.$date.'&page='.$p.'" class="text-danger"><strong>'.$p.'</strong></a>';
 					} else if ($medium_category_name != FALSE) {
-						echo '<a href="/index.php/news?big_category_name='.$big_category_name.'&medium_category_name='.$medium_category_name.'&date='.$start_date.'&page='.$p.'" class="text-danger"><strong>'.$p.'</strong></a>';
+						echo '<a href="/index.php/news?big_category_name='.$big_category_name.'&medium_category_name='.$medium_category_name.'&date='.$date.'&page='.$p.'" class="text-danger"><strong>'.$p.'</strong></a>';
 					} else {
-						echo '<a href="/index.php/news?big_category_name='.$big_category_name.'&date='.$start_date.'&page='.$p.'" class="text-danger"><strong>'.$p.'</strong></a>';
+						echo '<a href="/index.php/news?big_category_name='.$big_category_name.'&date='.$date.'&page='.$p.'" class="text-danger"><strong>'.$p.'</strong></a>';
 					}
 				} else {
 					if ($small_category_name != FALSE) {
-						echo '<a href="/index.php/news?big_category_name='.$big_category_name.'&medium_category_name='.$medium_category_name.'&small_category_name='.$small_category_name.'&date='.$start_date.'&page='.$p.'" class="text-muted">'.$p.'</a>';
+						echo '<a href="/index.php/news?big_category_name='.$big_category_name.'&medium_category_name='.$medium_category_name.'&small_category_name='.$small_category_name.'&date='.$date.'&page='.$p.'" class="text-muted">'.$p.'</a>';
 					} else if ($medium_category_name != FALSE) {
-						echo '<a href="/index.php/news?big_category_name='.$big_category_name.'&medium_category_name='.$medium_category_name.'&date='.$start_date.'&page='.$p.'" class="text-muted">'.$p.'</a>';
+						echo '<a href="/index.php/news?big_category_name='.$big_category_name.'&medium_category_name='.$medium_category_name.'&date='.$date.'&page='.$p.'" class="text-muted">'.$p.'</a>';
 					} else {
-						echo '<a href="/index.php/news?big_category_name='.$big_category_name.'&date='.$start_date.'&page='.$p.'" class="text-muted">'.$p.'</a>';
+						echo '<a href="/index.php/news?big_category_name='.$big_category_name.'&date='.$date.'&page='.$p.'" class="text-muted">'.$p.'</a>';
 					}
 				}
 			}
 			if ($end_page - $start_page == 9) {
 				$next_page = $end_page + 1;
 				if ($small_category_name != FALSE) {
-					echo '<a href="/index.php/news?big_category_name='.$big_category_name.'&medium_category_name='.$medium_category_name.'&small_category_name='.$small_category_name.'&date='.$start_date.'&page='.$next_page.'" class="text-muted">다음 ></a>';
+					echo '<a href="/index.php/news?big_category_name='.$big_category_name.'&medium_category_name='.$medium_category_name.'&small_category_name='.$small_category_name.'&date='.$date.'&page='.$next_page.'" class="text-muted">다음 ></a>';
 				} else if ($medium_category_name != FALSE) {
-					echo '<a href="/index.php/news?big_category_name='.$big_category_name.'&medium_category_name='.$medium_category_name.'&date='.$start_date.'&page='.$next_page.'" class="text-muted">다음 ></a>';
+					echo '<a href="/index.php/news?big_category_name='.$big_category_name.'&medium_category_name='.$medium_category_name.'&date='.$date.'&page='.$next_page.'" class="text-muted">다음 ></a>';
 				} else {
-					echo '<a href="/index.php/news?big_category_name='.$big_category_name.'&date='.$start_date.'&page='.$next_page.'" class="text-muted">다음 ></a>';
+					echo '<a href="/index.php/news?big_category_name='.$big_category_name.'&date='.$date.'&page='.$next_page.'" class="text-muted">다음 ></a>';
 				}
 			}
 			echo '</div><!-- articles_pages -->';
 			echo '<div class="articles_dates">';
 			foreach ($dates as $value) {
-				if ($value->day == $start_date) {
+				if ($value->day == $date) {
 					if ($small_category_name != FALSE) {
 						echo '<a href="/index.php/news?big_category_name='.$big_category_name.'&medium_category_name='.$medium_category_name.'&small_category_name='.$small_category_name.'&date='.$value->day.'" class="text-danger"><strong>'.$value->day.'</strong></a>';
 					} else if ($medium_category_name != FALSE) {

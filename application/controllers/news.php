@@ -16,13 +16,11 @@ class News extends CI_Controller {
 		$big_category_name = $this->input->get('big_category_name');
 		$medium_category_name = $this->input->get('medium_category_name');
 		$small_category_name = $this->input->get('small_category_name');
-		$start_date = $this->input->get('date');
+		$date = $this->input->get('date');
 		$page = $this->input->get('page');
 		$article_id = $this->input->get('article_id');
 		
-		$big_categories = array();
-		$big_categories[] = (object) array('id' => '1', 'name' => '뉴스');
-		$big_categories[] = (object) array('id' => '9', 'name' => '스포츠');
+		$big_categories = $this->make_up_big_categories();
 		if ($big_category_name == FALSE) {
 			$big_category_id = $big_categories[0]->id;
 			$big_category_name = $big_categories[0]->name;
@@ -30,24 +28,7 @@ class News extends CI_Controller {
 			$big_category_id = $this->category_model->get_category_id($big_category_name);
 		}
 		
-		if ($big_category_id == 1) {
-			$medium_categories = array();
-			$medium_categories[] = (object) array('name' => '뉴스홈');
-			$medium_categories[] = (object) array('name' => '속보');
-			$medium_categories = array_merge($medium_categories, $this->category_model->get_child_categories($big_category_id));
-			$medium_categories[] = (object) array('name' => 'TV');
-		} elseif ($big_category_id == 9) {
-			$medium_categories = array();
-			$medium_categories[] = (object) array('name' => '스포츠홈');
-			$medium_categories[] = (object) array('name' => '야구');
-			$medium_categories[] = (object) array('name' => '축구');
-			$medium_categories[] = (object) array('name' => '농구/배구');
-			$medium_categories[] = (object) array('name' => '골프');
-			$medium_categories[] = (object) array('name' => '스포츠 일반');
-			$medium_categories[] = (object) array('name' => 'e스포츠');
-		} else {
-			$medium_categories = $this->category_model->get_child_categories($big_category_id);
-		}
+		$medium_categories = $this->make_up_medium_categories($big_category_id);
 		
 		if ($medium_category_name == FALSE) {
 			if ($big_category_id == 1) {
@@ -77,84 +58,13 @@ class News extends CI_Controller {
 		} elseif ($medium_category_name == 'TV') {
 		} elseif ($medium_category_name != FALSE) {
 			$medium_category_id = $this->category_model->get_category_id($medium_category_name);
-			if ($medium_category_id == 2) {
-				$small_categories = array();
-				$small_categories[] = (object) array('name' => '청와대');
-				$small_categories[] = (object) array('name' => '국회/정당');
-				$small_categories[] = (object) array('name' => '북한');
-				$small_categories[] = (object) array('name' => '행정');
-				$small_categories[] = (object) array('name' => '국방/외교');
-				$small_categories[] = (object) array('name' => '정치 일반');
-			} elseif ($medium_category_id == 3) {
-				$small_categories = array();
-				$small_categories[] = (object) array('name' => '금융');
-				$small_categories[] = (object) array('name' => '증권');
-				$small_categories[] = (object) array('name' => '기업/재계');
-				$small_categories[] = (object) array('name' => '부동산');
-				$small_categories[] = (object) array('name' => '글로벌경제');
-				$small_categories[] = (object) array('name' => '생활경제');
-				$small_categories[] = (object) array('name' => '경제 일반');
-			} elseif ($medium_category_id == 4) {
-				$small_categories = array();
-				$small_categories[] = (object) array('name' => '사건사고');
-				$small_categories[] = (object) array('name' => '교육');
-				$small_categories[] = (object) array('name' => '노동');
-				$small_categories[] = (object) array('name' => '언론');
-				$small_categories[] = (object) array('name' => '환경');
-				$small_categories[] = (object) array('name' => '인권/복지');
-				$small_categories[] = (object) array('name' => '식품/의료');
-				$small_categories[] = (object) array('name' => '지역');
-				$small_categories[] = (object) array('name' => '인물');
-				$small_categories[] = (object) array('name' => '사회 일반');
-			} elseif ($medium_category_id == 5) {
-				$small_categories = array();
-				$small_categories[] = (object) array('name' => '건강정보');
-				$small_categories[] = (object) array('name' => '자동차/시승기');
-				$small_categories[] = (object) array('name' => '도로/교통');
-				$small_categories[] = (object) array('name' => '여행/레저');
-				$small_categories[] = (object) array('name' => '음식/맛집');
-				$small_categories[] = (object) array('name' => '패션/뷰티');
-				$small_categories[] = (object) array('name' => '공연/전시');
-				$small_categories[] = (object) array('name' => '책');
-				$small_categories[] = (object) array('name' => '종교');
-				$small_categories[] = (object) array('name' => '날씨');
-				$small_categories[] = (object) array('name' => '생활/문화 일반');
-			} elseif ($medium_category_id == 6) {
-				$small_categories = array();
-				$small_categories[] = (object) array('name' => '아시아/호주');
-				$small_categories[] = (object) array('name' => '미국/중남미');
-				$small_categories[] = (object) array('name' => '유럽');
-				$small_categories[] = (object) array('name' => '중동/아프리카');
-				$small_categories[] = (object) array('name' => '세계 일반');
-			} elseif ($medium_category_id == 7) {
-				$small_categories = array();
-				$small_categories[] = (object) array('name' => '모바일');
-				$small_categories[] = (object) array('name' => '인터넷/SNS');
-				$small_categories[] = (object) array('name' => '통신/뉴미디어');
-				$small_categories[] = (object) array('name' => 'IT 일반');
-				$small_categories[] = (object) array('name' => '보안/해킹');
-				$small_categories[] = (object) array('name' => '컴퓨터');
-				$small_categories[] = (object) array('name' => '게임/리뷰');
-				$small_categories[] = (object) array('name' => '과학 일반');
-			} elseif ($medium_category_id == 8) {
-				$small_categories = array();
-				$small_categories[] = (object) array('name' => '연예가화제');
-				$small_categories[] = (object) array('name' => '방송/TV');
-				$small_categories[] = (object) array('name' => '드라마');
-				$small_categories[] = (object) array('name' => '영화');
-				$small_categories[] = (object) array('name' => '해외 연예');
-			} elseif ($medium_category_id == 10 or $medium_category_id == 11 or $medium_category_id == 13 or $medium_category_id == 12 or $medium_category_id == 14 or $medium_category_id == 15) {
-			} else {
-				$small_categories = $this->category_model->get_child_categories($medium_category_id);
-			}
+			$small_categories = $this->make_up_small_categories($medium_category_id);
 			
 			if ($article_id == FALSE) {
 				$dates = $this->daycount_model->get_dates();
-				if ($start_date == FALSE) {
-					$start_date = $dates[0]->day;
+				if ($date == FALSE) {
+					$date = $dates[0]->day;
 				}
-				$date = new DateTime($start_date);
-				$end_date = $date->add(new DateInterval('P1D'))->format('Y-m-d');
 				
 				if ($page == FALSE) {
 					$page = 1;
@@ -178,7 +88,7 @@ class News extends CI_Controller {
 					return ((float)$usec + (float)$sec);
 				}
 				
-				$articles = $this->article_model->get_articles($small_category_name == FALSE ? $medium_category_id : $this->category_model->get_category_id($small_category_name), $start_date, $page);
+				$articles = $this->article_model->get_articles($small_category_name == FALSE ? $medium_category_id : $this->category_model->get_category_id($small_category_name), $date, $page);
 				foreach ($articles as $value) {
 					$value->medium_category_name = $this->article_model->get_medium_category_name($value->id);
 				}
@@ -191,7 +101,7 @@ class News extends CI_Controller {
 		$data['big_category_name'] = $big_category_name;
 		$data['medium_category_name'] = $medium_category_name;
 		$data['small_category_name'] = $small_category_name;
-		$data['start_date'] = $start_date;
+		$data['date'] = $date;
 		$data['page'] = $page;
 		$data['big_categories'] = $big_categories;
 		$data['medium_categories'] = $medium_categories;
@@ -214,6 +124,118 @@ class News extends CI_Controller {
 		$this->load->view('templates/header', $data);
 		$this->load->view('news/home', $data);
 		$this->load->view('templates/footer', $data);
+	}
+	
+	private function make_up_big_categories() {
+		$big_categories = array();
+		$big_categories[] = (object) array('id' => '1', 'name' => '뉴스');
+		$big_categories[] = (object) array('id' => '9', 'name' => '스포츠');
+		return $big_categories;
+	}
+	
+	private function make_up_medium_categories($big_category_id) {
+		if ($big_category_id == 1) {
+			$medium_categories = array();
+			$medium_categories[] = (object) array('name' => '뉴스홈');
+			$medium_categories[] = (object) array('name' => '속보');
+			$medium_categories = array_merge($medium_categories, $this->category_model->get_child_categories($big_category_id));
+			$medium_categories[] = (object) array('name' => 'TV');
+			return $medium_categories;
+		} elseif ($big_category_id == 9) {
+			$medium_categories = array();
+			$medium_categories[] = (object) array('name' => '스포츠홈');
+			$medium_categories[] = (object) array('name' => '야구');
+			$medium_categories[] = (object) array('name' => '축구');
+			$medium_categories[] = (object) array('name' => '농구/배구');
+			$medium_categories[] = (object) array('name' => '골프');
+			$medium_categories[] = (object) array('name' => '스포츠 일반');
+			$medium_categories[] = (object) array('name' => 'e스포츠');
+			return $medium_categories;
+		} else {
+			$medium_categories = $this->category_model->get_child_categories($big_category_id);
+			return $medium_categories;
+		}
+	}
+	
+	private function make_up_small_categories($medium_category_id) {
+		if ($medium_category_id == 2) {
+			$small_categories = array();
+			$small_categories[] = (object) array('name' => '청와대');
+			$small_categories[] = (object) array('name' => '국회/정당');
+			$small_categories[] = (object) array('name' => '북한');
+			$small_categories[] = (object) array('name' => '행정');
+			$small_categories[] = (object) array('name' => '국방/외교');
+			$small_categories[] = (object) array('name' => '정치 일반');
+			return $small_categories;
+		} elseif ($medium_category_id == 3) {
+			$small_categories = array();
+			$small_categories[] = (object) array('name' => '금융');
+			$small_categories[] = (object) array('name' => '증권');
+			$small_categories[] = (object) array('name' => '기업/재계');
+			$small_categories[] = (object) array('name' => '부동산');
+			$small_categories[] = (object) array('name' => '글로벌경제');
+			$small_categories[] = (object) array('name' => '생활경제');
+			$small_categories[] = (object) array('name' => '경제 일반');
+			return $small_categories;
+		} elseif ($medium_category_id == 4) {
+			$small_categories = array();
+			$small_categories[] = (object) array('name' => '사건사고');
+			$small_categories[] = (object) array('name' => '교육');
+			$small_categories[] = (object) array('name' => '노동');
+			$small_categories[] = (object) array('name' => '언론');
+			$small_categories[] = (object) array('name' => '환경');
+			$small_categories[] = (object) array('name' => '인권/복지');
+			$small_categories[] = (object) array('name' => '식품/의료');
+			$small_categories[] = (object) array('name' => '지역');
+			$small_categories[] = (object) array('name' => '인물');
+			$small_categories[] = (object) array('name' => '사회 일반');
+			return $small_categories;
+		} elseif ($medium_category_id == 5) {
+			$small_categories = array();
+			$small_categories[] = (object) array('name' => '건강정보');
+			$small_categories[] = (object) array('name' => '자동차/시승기');
+			$small_categories[] = (object) array('name' => '도로/교통');
+			$small_categories[] = (object) array('name' => '여행/레저');
+			$small_categories[] = (object) array('name' => '음식/맛집');
+			$small_categories[] = (object) array('name' => '패션/뷰티');
+			$small_categories[] = (object) array('name' => '공연/전시');
+			$small_categories[] = (object) array('name' => '책');
+			$small_categories[] = (object) array('name' => '종교');
+			$small_categories[] = (object) array('name' => '날씨');
+			$small_categories[] = (object) array('name' => '생활/문화 일반');
+			return $small_categories;
+		} elseif ($medium_category_id == 6) {
+			$small_categories = array();
+			$small_categories[] = (object) array('name' => '아시아/호주');
+			$small_categories[] = (object) array('name' => '미국/중남미');
+			$small_categories[] = (object) array('name' => '유럽');
+			$small_categories[] = (object) array('name' => '중동/아프리카');
+			$small_categories[] = (object) array('name' => '세계 일반');
+			return $small_categories;
+		} elseif ($medium_category_id == 7) {
+			$small_categories = array();
+			$small_categories[] = (object) array('name' => '모바일');
+			$small_categories[] = (object) array('name' => '인터넷/SNS');
+			$small_categories[] = (object) array('name' => '통신/뉴미디어');
+			$small_categories[] = (object) array('name' => 'IT 일반');
+			$small_categories[] = (object) array('name' => '보안/해킹');
+			$small_categories[] = (object) array('name' => '컴퓨터');
+			$small_categories[] = (object) array('name' => '게임/리뷰');
+			$small_categories[] = (object) array('name' => '과학 일반');
+			return $small_categories;
+		} elseif ($medium_category_id == 8) {
+			$small_categories = array();
+			$small_categories[] = (object) array('name' => '연예가화제');
+			$small_categories[] = (object) array('name' => '방송/TV');
+			$small_categories[] = (object) array('name' => '드라마');
+			$small_categories[] = (object) array('name' => '영화');
+			$small_categories[] = (object) array('name' => '해외 연예');
+			return $small_categories;
+		} elseif ($medium_category_id == 10 or $medium_category_id == 11 or $medium_category_id == 12 or $medium_category_id == 13 or $medium_category_id == 14 or $medium_category_id == 15) {
+		} else {
+			$small_categories = $this->category_model->get_child_categories($medium_category_id);
+			return $small_categories;
+		}
 	}
 	
 	// cluster가 없을 때 사용하기 위해서 기존의 pc_hotissue1로 cluster를 임시로 생성
