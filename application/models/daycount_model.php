@@ -1,6 +1,6 @@
 <?php
 class Daycount_model extends CI_Model {
-	
+
 	public function get_dates()
 	{
 		$this->db->select('day');

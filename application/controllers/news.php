@@ -4,7 +4,7 @@ class News extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('categories_model');
+		$this->load->model('category_model');
 		$this->load->model('article_model');
 		$this->load->model('daycount_model');
 		$this->load->model('small_cluster_model');
@@ -27,14 +27,14 @@ class News extends CI_Controller {
 			$big_category_id = $big_categories[0]->id;
 			$big_category_name = $big_categories[0]->name;
 		} else {
-			$big_category_id = $this->categories_model->get_category_id($big_category_name);
+			$big_category_id = $this->category_model->get_category_id($big_category_name);
 		}
 		
 		if ($big_category_id == 1) {
 			$medium_categories = array();
 			$medium_categories[] = (object) array('name' => '뉴스홈');
 			$medium_categories[] = (object) array('name' => '속보');
-			$medium_categories = array_merge($medium_categories, $this->categories_model->get_child_categories($big_category_id));
+			$medium_categories = array_merge($medium_categories, $this->category_model->get_child_categories($big_category_id));
 			$medium_categories[] = (object) array('name' => 'TV');
 		} elseif ($big_category_id == 9) {
 			$medium_categories = array();
@@ -46,7 +46,7 @@ class News extends CI_Controller {
 			$medium_categories[] = (object) array('name' => '스포츠 일반');
 			$medium_categories[] = (object) array('name' => 'e스포츠');
 		} else {
-			$medium_categories = $this->categories_model->get_child_categories($big_category_id);
+			$medium_categories = $this->category_model->get_child_categories($big_category_id);
 		}
 		
 		if ($medium_category_name == FALSE) {
@@ -60,7 +60,7 @@ class News extends CI_Controller {
 		if ($medium_category_name == '뉴스홈' or $medium_category_name == '속보' or $medium_category_name == '스포츠홈') {
 			if ($article_id == FALSE) {
 				$small_clusters = $this->small_cluster_model->get_all_small_clusters();
-				$num_small_clusters = $this->categories_model->get_home_category_num_small_clusters($medium_category_name);
+				$num_small_clusters = $this->category_model->get_home_category_num_small_clusters($medium_category_name);
 				if (count($small_clusters) > $num_small_clusters) {
 					$small_clusters = array_splice($small_clusters, 0, $num_small_clusters);
 				}
@@ -76,7 +76,7 @@ class News extends CI_Controller {
 			}
 		} elseif ($medium_category_name == 'TV') {
 		} elseif ($medium_category_name != FALSE) {
-			$medium_category_id = $this->categories_model->get_category_id($medium_category_name);
+			$medium_category_id = $this->category_model->get_category_id($medium_category_name);
 			if ($medium_category_id == 2) {
 				$small_categories = array();
 				$small_categories[] = (object) array('name' => '청와대');
@@ -145,7 +145,7 @@ class News extends CI_Controller {
 				$small_categories[] = (object) array('name' => '해외 연예');
 			} elseif ($medium_category_id == 10 or $medium_category_id == 11 or $medium_category_id == 13 or $medium_category_id == 12 or $medium_category_id == 14 or $medium_category_id == 15) {
 			} else {
-				$small_categories = $this->categories_model->get_child_categories($medium_category_id);
+				$small_categories = $this->category_model->get_child_categories($medium_category_id);
 			}
 			
 			if ($article_id == FALSE) {
@@ -162,7 +162,7 @@ class News extends CI_Controller {
 				
 				if ($small_category_name == FALSE) {
 					$small_clusters = $this->small_cluster_model->get_small_clusters($medium_category_id);
-					$num_small_clusters = $this->categories_model->get_medium_category_num_small_clusters($medium_category_id);
+					$num_small_clusters = $this->category_model->get_medium_category_num_small_clusters($medium_category_id);
 					if (count($small_clusters) > $num_small_clusters) {
 						$small_clusters = array_splice($small_clusters, 0, $num_small_clusters);
 					}
@@ -178,7 +178,7 @@ class News extends CI_Controller {
 					return ((float)$usec + (float)$sec);
 				}
 				
-				$articles = $this->article_model->get_articles($small_category_name == FALSE ? $medium_category_id : $this->categories_model->get_category_id($small_category_name), $start_date, $page);
+				$articles = $this->article_model->get_articles($small_category_name == FALSE ? $medium_category_id : $this->category_model->get_category_id($small_category_name), $start_date, $page);
 				foreach ($articles as $value) {
 					$value->medium_category_name = $this->article_model->get_medium_category_name($value->id);
 				}
@@ -236,16 +236,16 @@ class News extends CI_Controller {
 	public function create_num_small_clusters()
 	{
 		// 중분류마다 보여줄 cluster 개수를 DB에 기본값세팅
-		$big_categories = $this->categories_model->get_big_categories();
+		$big_categories = $this->category_model->get_big_categories();
 		foreach ($big_categories as $value) {
-			$medium_categories = $this->categories_model->get_child_categories($value->id);
+			$medium_categories = $this->category_model->get_child_categories($value->id);
 			foreach ($medium_categories as $value) {
-				$this->categories_model->insert_medium_category_num_small_clusters($value->id);
+				$this->category_model->insert_medium_category_num_small_clusters($value->id);
 			}
 		}
 		// 보여줄 cluster 개수를 DB에 기본값세팅
-		$this->categories_model->insert_home_category_num_small_clusters('뉴스홈');
-		$this->categories_model->insert_home_category_num_small_clusters('속보');
-		$this->categories_model->insert_home_category_num_small_clusters('스포츠홈');
+		$this->category_model->insert_home_category_num_small_clusters('뉴스홈');
+		$this->category_model->insert_home_category_num_small_clusters('속보');
+		$this->category_model->insert_home_category_num_small_clusters('스포츠홈');
 	}
 }

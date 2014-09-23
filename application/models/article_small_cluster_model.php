@@ -1,6 +1,6 @@
 <?php
 class Article_small_cluster_model extends CI_Model {
-	
+
 	public function insert($article_id, $small_cluster_id)
 	{
 		if (!isset($article_id)) {
@@ -14,7 +14,7 @@ class Article_small_cluster_model extends CI_Model {
 			   'article_id' => $article_id
 			   , 'small_cluster_id' => $small_cluster_id
 			);
-
+			
 			$this->db->insert('article_small_clusters', $data); 
 		}
 	}

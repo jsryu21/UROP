@@ -1,6 +1,6 @@
 <?php
-class Categories_model extends CI_Model {
-	
+class Category_model extends CI_Model {
+
 	public function get_big_categories()
 	{
 		$query = $this->db->get_where('categories', array('parent_id' => NULL));
@@ -58,7 +58,7 @@ class Categories_model extends CI_Model {
 			$data = array(
 			   'medium_category_id' => $medium_category_id
 			);
-
+			
 			$this->db->insert('medium_category_num_small_clusters', $data); 
 		}
 	}
@@ -84,7 +84,7 @@ class Categories_model extends CI_Model {
 			$data = array(
 			   'home_category_name' => $home_category_name
 			);
-
+			
 			$this->db->insert('home_category_num_small_clusters', $data); 
 		}
 	}

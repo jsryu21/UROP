@@ -48,6 +48,7 @@
 $active_group = 'default';
 $active_record = TRUE;
 
+// DB 정보 세팅하는 곳입니다.
 $db['default']['hostname'] = 'localhost';
 $db['default']['port'] = 3306;
 $db['default']['username'] = 'root';
