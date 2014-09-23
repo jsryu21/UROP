@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://checkee.net/index.php';
+$config['base_url']	= '';
 
 /*
 |--------------------------------------------------------------------------
@@ -224,7 +224,7 @@ $config['cache_path'] = '';
 | MUST set an encryption key.  See the user guide for info.
 |
 */
-$config['encryption_key'] = 'checkee';
+$config['encryption_key'] = '';
 
 /*
 |--------------------------------------------------------------------------
@@ -357,14 +357,6 @@ $config['rewrite_short_tags'] = FALSE;
 */
 $config['proxy_ips'] = '';
 
-$config['facebook_api_id'] = '179014905594911';
-$config['facebook_app_secret'] = 'f2858a88455a306929969d718278510d';
-$config['facebook_redirect_url'] = $config['base_url']; // could be modified in the controller
-$config['facebook_permissions'] = array(
-	'public_profile',
-	'email',
-	'user_friends',
-);
 
 /* End of file config.php */
 /* Location: ./application/config/config.php */

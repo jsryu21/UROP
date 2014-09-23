@@ -5,10 +5,10 @@ class News extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->model('categories_model');
-		$this->load->model('articles_model');
+		$this->load->model('article_model');
 		$this->load->model('daycount_model');
 		$this->load->model('small_cluster_model');
-		$this->load->model('article_small_clusters');
+		$this->load->model('article_small_cluster_model');
 	}
 
 	public function index()
@@ -65,14 +65,14 @@ class News extends CI_Controller {
 					$small_clusters = array_splice($small_clusters, 0, $num_small_clusters);
 				}
 				foreach ($small_clusters as $value) {
-					$value->articles = $this->article_small_clusters->get_articles($value->small_cluster_id);
-					foreach ($value->articles as $a) {
-						$a->medium_category_name = $this->articles_model->get_medium_category_name($a->id);
+					$value->articles = $this->article_small_cluster_model->get_articles($value->small_cluster_id);
+					foreach ($value->articles as $article) {
+						$article->medium_category_name = $this->article_model->get_medium_category_name($article->id);
 					}
 				}
 			} else {
 				// 개별 기사 화면
-				$article = $this->articles_model->get_article($article_id);
+				$article = $this->article_model->get_article($article_id);
 			}
 		} elseif ($medium_category_name == 'TV') {
 		} elseif ($medium_category_name != FALSE) {
@@ -167,9 +167,9 @@ class News extends CI_Controller {
 						$small_clusters = array_splice($small_clusters, 0, $num_small_clusters);
 					}
 					foreach ($small_clusters as $value) {
-						$value->articles = $this->article_small_clusters->get_articles($value->small_cluster_id);
-						foreach ($value->articles as $a) {
-							$a->medium_category_name = $this->articles_model->get_medium_category_name($a->id);
+						$value->articles = $this->article_small_cluster_model->get_articles($value->small_cluster_id);
+						foreach ($value->articles as $article) {
+							$article->medium_category_name = $this->article_model->get_medium_category_name($article->id);
 						}
 					}
 				}
@@ -177,48 +177,14 @@ class News extends CI_Controller {
 					list($usec, $sec) = explode(" ", microtime());
 					return ((float)$usec + (float)$sec);
 				}
-				 
-				//$start = get_time();
-				//$articles = $this->articles_model->get_articles($small_category_name == FALSE ? $medium_category_id : $this->categories_model->get_category_id($small_category_name), $start_date, $end_date, $page);
-				//$end = get_time();
-				//$time = $end - $start;
-				//echo '<br/>'.$time.'초 걸림';
-				//$start = get_time();
-				//$articles = $this->articles_model->get_articles_1($small_category_name == FALSE ? $medium_category_id : $this->categories_model->get_category_id($small_category_name), $start_date, $end_date, $page);
-				//$end = get_time();
-				//$time = $end - $start;
-				//echo '<br/>'.$time.'초 걸림';
-				//$start = get_time();
-				//$articles = $this->articles_model->get_articles_2($small_category_name == FALSE ? $medium_category_id : $this->categories_model->get_category_id($small_category_name), $start_date, $end_date, $page);
-				//$end = get_time();
-				//$time = $end - $start;
-				//echo '<br/>'.$time.'초 걸림';
-				//$start = get_time();
-				if ($start_date == '2014-03-24') {
-					$day = 1;
-				} elseif ($start_date == '2014-03-25') {
-					$day = 2;
-				} elseif ($start_date == '2014-03-25') {
-					$day = 3;
-				} elseif ($start_date == '2014-03-25') {
-					$day = 4;
-				} elseif ($start_date == '2014-03-25') {
-					$day = 5;
-				} elseif ($start_date == '2014-03-25') {
-					$day = 6;
-				} else {
-					$day = 7;
-				}
-				$articles = $this->articles_model->get_articles_4($small_category_name == FALSE ? $medium_category_id : $this->categories_model->get_category_id($small_category_name), $day, $page);
-				//$end = get_time();
-				//$time = $end - $start;
-				//echo '<br/>'.$time.'초 걸림';
+				
+				$articles = $this->article_model->get_articles($small_category_name == FALSE ? $medium_category_id : $this->categories_model->get_category_id($small_category_name), $start_date, $page);
 				foreach ($articles as $value) {
-					$value->medium_category_name = $this->articles_model->get_medium_category_name($value->id);
+					$value->medium_category_name = $this->article_model->get_medium_category_name($value->id);
 				}
 			} else {
 				// 개별 기사 화면
-				$article = $this->articles_model->get_article($article_id);
+				$article = $this->article_model->get_article($article_id);
 			}
 		}
 		
@@ -245,26 +211,31 @@ class News extends CI_Controller {
 			$data['article'] = $article;
 		}
 		
-		$this->load->view('templates/news_header', $data);
+		$this->load->view('templates/header', $data);
 		$this->load->view('news/home', $data);
-		$this->load->view('templates/news_footer', $data);
+		$this->load->view('templates/footer', $data);
 	}
 	
-	public function create_temp_small_cluster()
+	// cluster가 없을 때 사용하기 위해서 기존의 pc_hotissue1로 cluster를 임시로 생성
+	public function create_small_clusters()
 	{
-		$articles = $this->articles_model->get_pc_hotissue1();
+		$articles = $this->article_model->get_pc_hotissue1();
 		echo count($articles);
 		foreach ($articles as $value) {
-			$medium_category_id = $this->articles_model->get_medium_category_id($value->id);
+			$medium_category_id = $this->article_model->get_medium_category_id($value->id);
 			if ($medium_category_id != FALSE) {
 				$small_cluster_id = $this->small_cluster_model->insert($value->pc_hotissue1_title, $medium_category_id);
-				$this->article_small_clusters->insert($value->id, $small_cluster_id);
+				if ($small_cluster_id != FALSE) {
+					$this->article_small_cluster_model->insert($value->id, $small_cluster_id);
+				}
 			}
 		}
 	}
 	
-	public function create_medium_category_num_rows()
+	// cluster 개수를 DB에 기본값세팅
+	public function create_num_small_clusters()
 	{
+		// 중분류마다 보여줄 cluster 개수를 DB에 기본값세팅
 		$big_categories = $this->categories_model->get_big_categories();
 		foreach ($big_categories as $value) {
 			$medium_categories = $this->categories_model->get_child_categories($value->id);
@@ -272,6 +243,7 @@ class News extends CI_Controller {
 				$this->categories_model->insert_medium_category_num_small_clusters($value->id);
 			}
 		}
+		// 보여줄 cluster 개수를 DB에 기본값세팅
 		$this->categories_model->insert_home_category_num_small_clusters('뉴스홈');
 		$this->categories_model->insert_home_category_num_small_clusters('속보');
 		$this->categories_model->insert_home_category_num_small_clusters('스포츠홈');

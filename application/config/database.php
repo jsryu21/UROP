@@ -52,7 +52,7 @@ $db['default']['hostname'] = 'localhost';
 $db['default']['port'] = 3306;
 $db['default']['username'] = 'root';
 $db['default']['password'] = 'apmsetup';
-$db['default']['database'] = 'checkee';
+$db['default']['database'] = 'navernews';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
@@ -65,39 +65,6 @@ $db['default']['swap_pre'] = '';
 $db['default']['autoinit'] = TRUE;
 $db['default']['stricton'] = FALSE;
 
-$db['naver']['hostname'] = 'crux.snu.ac.kr';
-$db['naver']['port'] = 3306;
-$db['naver']['username'] = 'naver';
-$db['naver']['password'] = 'ids3141';
-$db['naver']['database'] = 'navernews';
-$db['naver']['dbdriver'] = 'mysql';
-$db['naver']['dbprefix'] = '';
-$db['naver']['pconnect'] = TRUE;
-$db['naver']['db_debug'] = TRUE;
-$db['naver']['cache_on'] = FALSE;
-$db['naver']['cachedir'] = '';
-$db['naver']['char_set'] = 'utf8';
-$db['naver']['dbcollat'] = 'utf8_general_ci';
-$db['naver']['swap_pre'] = '';
-$db['naver']['autoinit'] = TRUE;
-$db['naver']['stricton'] = FALSE;
-
-$db['local_naver']['hostname'] = 'localhost';
-$db['local_naver']['port'] = 3306;
-$db['local_naver']['username'] = 'root';
-$db['local_naver']['password'] = 'apmsetup';
-$db['local_naver']['database'] = 'navernews';
-$db['local_naver']['dbdriver'] = 'mysql';
-$db['local_naver']['dbprefix'] = '';
-$db['local_naver']['pconnect'] = TRUE;
-$db['local_naver']['db_debug'] = TRUE;
-$db['local_naver']['cache_on'] = FALSE;
-$db['local_naver']['cachedir'] = '';
-$db['local_naver']['char_set'] = 'utf8';
-$db['local_naver']['dbcollat'] = 'utf8_general_ci';
-$db['local_naver']['swap_pre'] = '';
-$db['local_naver']['autoinit'] = TRUE;
-$db['local_naver']['stricton'] = FALSE;
 
 /* End of file database.php */
 /* Location: ./application/config/database.php */

@@ -38,19 +38,9 @@
 |
 */
 
-$route['default_controller'] = 'pages';
-$route['friends/(:any)'] = 'pages/friends/$1';
-$route['user/(:any)'] = 'pages/user/$1';
-$route['detail/(:any)'] = 'pages/detail/$1';
-$route['check/(:any)'] = 'pages/check/$1';
-$route['check_submit'] = 'pages/check_submit';
-$route['agree/(:any)/(:any)'] = 'pages/agree/$1/$2';
-$route['disagree/(:any)/(:any)'] = 'pages/disagree/$1/$2';
-$route['logout'] = 'pages/logout';
-$route['news'] = 'news';
-$route['news/(:any)'] = 'news/index/$1';
-$route['news/create_temp_small_cluster'] = 'news/create_temp_small_cluster';
-$route['news/create_medium_category_num_rows'] = 'news/create_medium_category_num_rows';
+$route['default_controller'] = 'news';
+$route['news/create_small_clusters'] = 'news/create_small_clusters';
+$route['news/create_num_small_clusters'] = 'news/create_num_small_clusters';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */
