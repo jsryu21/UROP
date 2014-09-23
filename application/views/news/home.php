@@ -46,7 +46,7 @@
 	<div class="row">
 	<?php
 		if (isset($small_categories)) {
-			echo '<div class="col-lg-2">';
+			echo '<div class="small_categories">';
 			echo '<div class="medium_category_name">'.$medium_category_name.'</div>';
 			foreach ($small_categories as $small_category) {
 				$url = '/index.php/news?big_category_name='.$big_category_name.'&medium_category_name='.$medium_category_name.'&small_category_name='.$small_category->name;
@@ -57,9 +57,9 @@
 				}
 			}
 			echo '</div>';
-			echo '<div class="col-lg-10">';
+			echo '<div class="with_small_categories">';
 		} else {
-			echo '<div class="col-lg-12">';
+			echo '<div class="without_small_categories">';
 		}
 		if (isset($small_clusters)) {
 			echo '<div class="small_clusters">';

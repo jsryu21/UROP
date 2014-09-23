@@ -11,10 +11,12 @@ a.big_category:hover { text-decoration: none; }
 div.navbar { margin-bottom: 0px; }
 div.container-fluid { padding-left: 0px; padding-right: 0px; }
 div.navbar-collapse { padding-left: 0px; padding-right: 0px; }
-div.row { margin-top: 10px; }
+div.row { margin: 20px 0px 0px 0px; width: 100%; }
 a.text-primary:hover { text-decoration: none; color: blue; font-weight: bold; }
 a.text-muted:hover { text-decoration: none; color: black; }
-div.col-lg-2 { padding-left: 20px; }
+div.small_categories { width: 12.3%; float: left; padding-left: 5px; }
+div.with_small_categories { float: left; width: 87.7%; padding-left: 5px; padding-right: 5px; }
+div.without_small_categories { width: 100%; padding-left: 5px; padding-right: 5px; }
 div.medium_category_name { font-size: large; font-weight: bold; }
 div.small_clusters hr { border-top: 10px solid #eee; }
 div.small_clusters a { color: black; }
@@ -22,7 +24,7 @@ div.article_title { margin-right: 10px; font-size: large; font-weight: bold; }
 div.article_title a { color: black; }
 span.small_cluster_article_title { margin-right: 10px; font-size: small; }
 div.small_cluster_view_large_cluster img { margin-right: 10px; }
-div.article { clear: both; margin-top: 20px; }
+div.article { clear: both; margin-bottom: 20px; }
 div.article_photo { float: left; margin-right: 10px; }
 img.img-thumbnail { height: 48px; width: 70px; }
 span.stripped_article_content { margin-right: 10px; }
