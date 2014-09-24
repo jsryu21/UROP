@@ -51,6 +51,7 @@ class News extends CI_Controller {
 						$article->medium_category_name = $this->article_model->get_medium_category_name($article->id);
 					}
 				}
+				$article = NULL;
 			} else {
 				// 개별 기사 화면
 				$article = $this->article_model->get_article($article_id);
@@ -92,6 +93,7 @@ class News extends CI_Controller {
 				foreach ($articles as $value) {
 					$value->medium_category_name = $this->article_model->get_medium_category_name($value->id);
 				}
+				$article = NULL;
 			} else {
 				// 개별 기사 화면
 				$article = $this->article_model->get_article($article_id);
