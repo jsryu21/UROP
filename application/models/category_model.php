@@ -74,28 +74,28 @@ class Category_model extends CI_Model {
 	}
 	
 	// 보여줄 small cluster 개수를 DB에 지정, 따로 cluster 개수를 지정하지 않으면 DB에서 기본값으로 넣음
-	public function insert_home_category_num_small_clusters($home_category_name)
+	public function insert_medium_category_num_small_clusters_exc($medium_category_name)
 	{
-		if (!isset($home_category_name)) {
+		if (!isset($medium_category_name)) {
 			return FALSE;
 		}
 		
-		if ($this->db->get_where('home_category_num_small_clusters', array('home_category_name' => $home_category_name))->num_rows() == 0) {
+		if ($this->db->get_where('medium_category_num_small_clusters_exc', array('medium_category_name' => $medium_category_name))->num_rows() == 0) {
 			$data = array(
-			   'home_category_name' => $home_category_name
+			   'medium_category_name' => $medium_category_name
 			);
 			
-			$this->db->insert('home_category_num_small_clusters', $data); 
+			$this->db->insert('medium_category_num_small_clusters_exc', $data); 
 		}
 	}
 	
-	public function get_home_category_num_small_clusters($home_category_name)
+	public function get_medium_category_num_small_clusters_exc($medium_category_name)
 	{
-		if (!isset($home_category_name)) {
+		if (!isset($medium_category_name)) {
 			return FALSE;
 		}
 		
-		$query = $this->db->get_where('home_category_num_small_clusters', array('home_category_name' => $home_category_name));
+		$query = $this->db->get_where('medium_category_num_small_clusters_exc', array('medium_category_name' => $medium_category_name));
 		return $query->result()[0]->num_small_clusters;
 	}
 }

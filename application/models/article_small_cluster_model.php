@@ -9,13 +9,13 @@ class Article_small_cluster_model extends CI_Model {
 			return FALSE;
 		}
 		
-		if ($this->db->get_where('article_small_clusters', array('article_id' => $article_id, 'small_cluster_id' => $small_cluster_id))->num_rows() == 0) {
+		if ($this->db->get_where('article_small_cluster', array('article_id' => $article_id, 'small_cluster_id' => $small_cluster_id))->num_rows() == 0) {
 			$data = array(
 			   'article_id' => $article_id
 			   , 'small_cluster_id' => $small_cluster_id
 			);
 			
-			$this->db->insert('article_small_clusters', $data); 
+			$this->db->insert('article_small_cluster', $data);
 		}
 	}
 	
@@ -25,8 +25,8 @@ class Article_small_cluster_model extends CI_Model {
 			return FALSE;
 		}
 		
-		$this->db->from('article_small_clusters');
-		$this->db->join('nv_articles', 'article_small_clusters.article_id = nv_articles.id');
+		$this->db->from('article_small_cluster');
+		$this->db->join('nv_articles', 'article_small_cluster.article_id = nv_articles.id');
 		$this->db->where('small_cluster_id', $small_cluster_id);
 		$query = $this->db->get();
 		return $query->result();

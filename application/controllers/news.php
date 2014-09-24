@@ -41,7 +41,7 @@ class News extends CI_Controller {
 		if ($medium_category_name == '뉴스홈' or $medium_category_name == '속보' or $medium_category_name == '스포츠홈') {
 			if ($article_id == FALSE) {
 				$small_clusters = $this->small_cluster_model->get_all_small_clusters();
-				$num_small_clusters = $this->category_model->get_home_category_num_small_clusters($medium_category_name);
+				$num_small_clusters = $this->category_model->get_medium_category_num_small_clusters_exc($medium_category_name);
 				if (count($small_clusters) > $num_small_clusters) {
 					$small_clusters = array_splice($small_clusters, 0, $num_small_clusters);
 				}
@@ -266,8 +266,8 @@ class News extends CI_Controller {
 			}
 		}
 		// 보여줄 cluster 개수를 DB에 기본값세팅
-		$this->category_model->insert_home_category_num_small_clusters('뉴스홈');
-		$this->category_model->insert_home_category_num_small_clusters('속보');
-		$this->category_model->insert_home_category_num_small_clusters('스포츠홈');
+		$this->category_model->insert_medium_category_num_small_clusters_exc('뉴스홈');
+		$this->category_model->insert_medium_category_num_small_clusters_exc('속보');
+		$this->category_model->insert_medium_category_num_small_clusters_exc('스포츠홈');
 	}
 }
