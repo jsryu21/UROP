@@ -17,6 +17,8 @@ a.text-muted:hover { text-decoration: none; color: black; }
 div.small_categories { width: 12.3%; float: left; padding-left: 5px; }
 div.with_small_categories { float: left; width: 87.7%; padding-left: 5px; padding-right: 5px; }
 div.without_small_categories { width: 100%; padding-left: 5px; padding-right: 5px; }
+div.small_cluster_dates a { margin-left: 3px; margin-right: 3px; }
+div.small_cluster_dates hr { border-top: 10px solid #222; }
 div.medium_category_name { font-size: large; font-weight: bold; }
 div.small_clusters hr { border-top: 10px solid #eee; }
 div.small_clusters a { color: black; }

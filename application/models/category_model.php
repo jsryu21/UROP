@@ -47,6 +47,16 @@ class Category_model extends CI_Model {
 		return $query->result()[0]->id;
 	}
 	
+	public function get_category_name($category_id)
+	{
+		if (!isset($category_id)) {
+			return FALSE;
+		}
+		
+		$query = $this->db->get_where('categories', array('id' => $category_id));
+		return $query->result()[0]->name;
+	}
+	
 	// 중분류에서 보여줄 cluster 개수를 DB에 지정, 따로 cluster 개수를 지정하지 않으면 DB에서 기본값으로 넣음
 	public function insert_medium_category_num_small_clusters($medium_category_id)
 	{

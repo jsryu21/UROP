@@ -41,6 +41,7 @@
 $route['default_controller'] = 'news';
 $route['news/create_small_clusters'] = 'news/create_small_clusters';
 $route['news/create_num_small_clusters'] = 'news/create_num_small_clusters';
+$route['news/create_big_clusters'] = 'news/create_big_clusters';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

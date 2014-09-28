@@ -60,6 +60,17 @@
 			echo '<div class="with_small_categories">';
 		} else {
 			echo '<div class="without_small_categories">';
+			echo '<div class="small_cluster_dates">';
+			foreach ($dates as $value) {
+				$url = '';
+				if ($value->day == $date) {
+					echo '<a href="'.$url.'" class="text-danger">'.$value->day.'</a>';
+				} else {
+					echo '<a href="'.$url.'" class="text-muted">'.$value->day.'</a>';
+				}
+			}
+			echo '<hr />';
+			echo '</div><!-- small_cluster_dates -->';
 		}
 		if (isset($small_clusters)) {
 			echo '<div class="small_clusters">';
@@ -105,7 +116,7 @@
 					?>
 					<div class="small_cluster_view_large_cluster">
 						<img src="http://static.news.naver.net/image/news/2009/ico_list_sub2.gif" />
-						<a href=""><span class="text-muted">더보기</span></a>
+						<a href="/index.php/news?big_category_name=<?=$big_category_name?>&medium_category_name=<?=$small_cluster->medium_category_name?>&big_cluster_id=<?=$small_cluster->big_cluster_id?>"><span class="text-muted">더보기</span></a>
 					</div>
 					<hr />
 				</div>
@@ -191,7 +202,7 @@
 					echo '<a href="'.$url.'" class="text-muted">'.$value->day.'</a>';
 				}
 			}
-			echo '</div><!-- dates -->';
+			echo '</div><!-- articles_dates -->';
 		} elseif (isset($article)) {
 			echo '<div class="article_title">'.$article->title1.'</div>';
 			echo '<span class="article_time">'.$article->service_time.'</span>';
