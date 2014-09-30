@@ -53,6 +53,23 @@ class Small_cluster_model extends CI_Model {
 		return $query->result();
 	}
 	
+	public function get_range_small_clusters($name, $from, $to)
+	{
+		if (!isset($name)) {
+			return FALSE;
+		} elseif (!isset($from)) {
+			return FALSE;
+		} elseif (!isset($to)) {
+			return FALSE;
+		}
+		
+		$this->db->from('small_cluster');
+		$this->db->where($name . ' >= ', $from);
+		$this->db->where($name . ' <= ', $to);
+		$query = $this->db->get();
+		return $query->result();
+	}
+	
 	public function get_all_small_clusters()
 	{
 		$query = $this->db->get('small_cluster');

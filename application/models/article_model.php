@@ -20,24 +20,6 @@ class Article_model extends CI_Model {
 		return $query->result();
 	}
 	
-	public function get_medium_category_name($article_id)
-	{
-		if (!isset($article_id)) {
-			return FALSE;
-		}
-		
-		$this->db->from('article_categories');
-		$this->db->join('categories', 'article_categories.category_id = categories.id');
-		$this->db->where('categories.type', 'medium');
-		$this->db->where('article_categories.article_id', $article_id);
-		$query = $this->db->get();
-		
-		if ($query->num_rows() <= 0) {
-			return FALSE;
-		}
-		return $query->result()[0]->name;
-	}
-	
 	public function get_medium_category_id($article_id)
 	{
 		if (!isset($article_id)) {

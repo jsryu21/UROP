@@ -21,6 +21,7 @@ class News extends CI_Controller {
 		$page = $this->input->get('page');
 		$article_id = $this->input->get('article_id');
 		$big_cluster_id = $this->input->get('big_cluster_id');
+		$timespan = $this->input->get('timespan');
 		
 		$big_categories = $this->make_up_big_categories();
 		if ($big_category_name == FALSE) {
@@ -46,7 +47,10 @@ class News extends CI_Controller {
 				if ($date == FALSE) {
 					$date = $dates[0]->day;
 				}
-				$small_clusters = $this->set_small_clusters($this->small_cluster_model->get_small_clusters('date', $date), $this->category_model->get_medium_category_num_small_clusters_exc($medium_category_name));
+				if ($timespan == FALSE) {
+					$timespan = 6;
+				}
+				$small_clusters = $this->set_small_clusters($this->small_cluster_model->get_range_small_clusters('date', $date, (new DateTime($date))->add(new DateInterval('P'.$timespan.'D'))->format('Y-m-d')), $this->category_model->get_medium_category_num_small_clusters_exc($medium_category_name));
 			} else {
 				// 개별 기사 화면
 				$article = $this->article_model->get_article($article_id);
@@ -69,16 +73,8 @@ class News extends CI_Controller {
 				if ($small_category_name == FALSE) {
 					$small_clusters = $this->set_small_clusters($this->small_cluster_model->get_small_clusters('small_cluster_medium_category_id', $medium_category_id), $this->category_model->get_medium_category_num_small_clusters($medium_category_id));
 				}
-				function get_time() {
-					list($usec, $sec) = explode(" ", microtime());
-					return ((float)$usec + (float)$sec);
-				}
 				
 				$articles = $this->article_model->get_articles($small_category_name == FALSE ? $medium_category_id : $this->category_model->get_category_id($small_category_name), $date, $page);
-				foreach ($articles as $value) {
-					$value->medium_category_name = $this->article_model->get_medium_category_name($value->id);
-				}
-				$article = NULL;
 			} elseif ($article_id == FALSE) {
 				$small_clusters = $this->set_small_clusters($this->small_cluster_model->get_small_clusters('big_cluster_id', $big_cluster_id), $this->big_cluster_model->get($big_cluster_id)[0]->big_cluster_num_small_clusters);
 			} elseif ($big_cluster_id == FALSE) {
@@ -99,6 +95,9 @@ class News extends CI_Controller {
 		}
 		if (isset($dates)) {
 			$data['dates'] = $dates;
+		}
+		if (isset($timespan)) {
+			$data['timespan'] = $timespan;
 		}
 		if (isset($small_clusters)) {
 			$data['small_clusters'] = $small_clusters;
@@ -234,9 +233,6 @@ class News extends CI_Controller {
 		}
 		foreach ($small_clusters as $value) {
 			$value->articles = $this->article_small_cluster_model->get_articles($value->small_cluster_id);
-			foreach ($value->articles as $article) {
-				$article->medium_category_name = $this->article_model->get_medium_category_name($article->id);
-			}
 			$value->medium_category_name = $this->category_model->get_category_name($value->small_cluster_medium_category_id);
 		}
 		return $small_clusters;

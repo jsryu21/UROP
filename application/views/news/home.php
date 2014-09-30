@@ -62,15 +62,27 @@
 			echo '<div class="without_small_categories">';
 			echo '<div class="small_cluster_dates">';
 			foreach ($dates as $value) {
-				$url = '';
+				$url = '/index.php/news?big_category_name='.$big_category_name.'&medium_category_name='.$medium_category_name.'&date='.$value->day.'&timespan='.$timespan;
+				$cluster_date = (new DateTime($value->day))->format('n월 j일(l)');
 				if ($value->day == $date) {
-					echo '<a href="'.$url.'" class="text-danger">'.$value->day.'</a>';
+					echo '<a href="'.$url.'" class="text-strong">'.$cluster_date.'</a>';
 				} else {
-					echo '<a href="'.$url.'" class="text-muted">'.$value->day.'</a>';
+					echo '<a href="'.$url.'" class="text-muted">'.$cluster_date.'</a>';
 				}
 			}
-			echo '<hr />';
 			echo '</div><!-- small_cluster_dates -->';
+			echo '<div class="small_cluster_dates_timespan">';
+			echo '<select id="dynamic_select">';
+			$url = '/index.php/news?big_category_name='.$big_category_name.'&medium_category_name='.$medium_category_name.'&date='.$date.'&timespan=';
+			echo '<option '.($timespan == 6 ? 'selected' : '').' value="'.$url.'6">T + 6</option>';
+			echo '<option '.($timespan == 12 ? 'selected' : '').' value="'.$url.'12">T + 12</option>';
+			echo '<option '.($timespan == 18 ? 'selected' : '').' value="'.$url.'18">T + 18</option>';
+			echo '<option '.($timespan == 24 ? 'selected' : '').' value="'.$url.'24">T + 24</option>';
+			echo '</select>';
+			echo '</div><!-- small_cluster_dates_timespan -->';
+			echo '<div class="small_cluster_dates_hr">';
+			echo '<hr />';
+			echo '</div><!-- small_cluster_dates_hr -->';
 		}
 		if (isset($small_clusters)) {
 			echo '<div class="small_clusters">';
@@ -234,4 +246,4 @@
 		?>
 		</div><!-- col-lg-10 or col-lg-12 -->
 	</div><!-- row -->
-</div> <!-- /container -->
+</div><!-- /container -->
