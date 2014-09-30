@@ -61,10 +61,10 @@
 		} else {
 			echo '<div class="without_small_categories">';
 			echo '<div class="small_cluster_dates">';
-			foreach ($dates as $value) {
-				$url = '/index.php/news?big_category_name='.$big_category_name.'&medium_category_name='.$medium_category_name.'&date='.$value->day.'&timespan='.$timespan;
-				$cluster_date = (new DateTime($value->day))->format('n월 j일(l)');
-				if ($value->day == $date) {
+			foreach ($small_cluster_dates as $small_cluster_date) {
+				$url = '/index.php/news?big_category_name='.$big_category_name.'&medium_category_name='.$medium_category_name.'&date='.$small_cluster_date->day.'&timespan='.$timespan;
+				$cluster_date = (new DateTime($small_cluster_date->day))->format('n월 j일(l)');
+				if ($small_cluster_date->day == $date) {
 					echo '<a href="'.$url.'" class="text-strong">'.$cluster_date.'</a>';
 				} else {
 					echo '<a href="'.$url.'" class="text-muted">'.$cluster_date.'</a>';
@@ -138,31 +138,31 @@
 		}
 		if (isset($articles)) {
 			$start_page = (int)(($page - 1) / 10) * 10 + 1;
-			foreach (array_slice($articles, ($page - $start_page) * 25, 25) as $value) {
+			foreach (array_slice($articles, ($page - $start_page) * 25, 25) as $article) {
 				echo '<div class="article">';
 				if ($small_category_name != FALSE) {
-					$url = '/index.php/news?big_category_name='.$big_category_name.'&medium_category_name='.$medium_category_name.'&small_category_name='.$small_category_name.'&article_id='.$value->id;
+					$url = '/index.php/news?big_category_name='.$big_category_name.'&medium_category_name='.$medium_category_name.'&small_category_name='.$small_category_name.'&article_id='.$article->id;
 				} elseif ($medium_category_name != FALSE) {
-					$url = '/index.php/news?big_category_name='.$big_category_name.'&medium_category_name='.$medium_category_name.'&article_id='.$value->id;
-				} elseif ($value->medium_category_name != FALSE) {
-					$url = '/index.php/news?big_category_name='.$big_category_name.'&medium_category_name='.$value->medium_category_name.'&article_id='.$value->id;
+					$url = '/index.php/news?big_category_name='.$big_category_name.'&medium_category_name='.$medium_category_name.'&article_id='.$article->id;
+				} elseif ($article->medium_category_name != FALSE) {
+					$url = '/index.php/news?big_category_name='.$big_category_name.'&medium_category_name='.$article->medium_category_name.'&article_id='.$article->id;
 				} else {
-					$url = '/index.php/news?big_category_name='.$big_category_name.'&article_id='.$value->id;
+					$url = '/index.php/news?big_category_name='.$big_category_name.'&article_id='.$article->id;
 				}
-				echo '<div class="article_title"><a href="'.$url.'">'.$value->title1.'</a></div>';
+				echo '<div class="article_title"><a href="'.$url.'">'.$article->title1.'</a></div>';
 				$dom = new DOMDocument();
 				libxml_use_internal_errors(true);
-				$dom->loadHTML('<?xml encoding="utf-8" ?>'.$value->content);
-				if ($value->type == 'photo') {
+				$dom->loadHTML('<?xml encoding="utf-8" ?>'.$article->content);
+				if ($article->type == 'photo') {
 					if ($dom->getElementsByTagName('img')->length > 0) {
 						$img = $dom->getElementsByTagName('img')->item(0);
 						echo '<div class="article_photo"><img src="'.$img->attributes->getNamedItem("src")->value.'" alt="..." class="img-thumbnail" /></div>';
 					}
 				}
-				echo '<div><span class="stripped_article_content">'.mb_substr(strip_tags($value->content), 0, 100).'…</span>';
-				$service_time = new DateTime($value->service_time);
+				echo '<div><span class="stripped_article_content">'.mb_substr(strip_tags($article->content), 0, 100).'…</span>';
+				$service_time = new DateTime($article->service_time);
 				echo '<span class="article_time">'.$service_time->format('m-d h:m').'</span>';
-				echo '<span class="text-danger">'.$value->office_name.'</span>';
+				echo '<span class="text-danger">'.$article->office_name.'</span>';
 				echo '</div>';
 				echo '</div><!-- article -->';
 			}
@@ -206,12 +206,12 @@
 				}
 			}
 			echo '<div class="articles_dates">';
-			foreach ($dates as $value) {
-				$url = date_url($small_category_name, $big_category_name, $medium_category_name, $value->day);
-				if ($value->day == $date) {
-					echo '<a href="'.$url.'" class="text-danger">'.$value->day.'</a>';
+			foreach ($articles_dates as $articles_date) {
+				$url = date_url($small_category_name, $big_category_name, $medium_category_name, $articles_date->day);
+				if ($articles_date->day == $date) {
+					echo '<a href="'.$url.'" class="text-danger">'.$articles_date->day.'</a>';
 				} else {
-					echo '<a href="'.$url.'" class="text-muted">'.$value->day.'</a>';
+					echo '<a href="'.$url.'" class="text-muted">'.$articles_date->day.'</a>';
 				}
 			}
 			echo '</div><!-- articles_dates -->';
