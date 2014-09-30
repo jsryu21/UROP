@@ -22,6 +22,8 @@ class News extends CI_Controller {
 		$article_id = $this->input->get('article_id');
 		$big_cluster_id = $this->input->get('big_cluster_id');
 		$timespan = $this->input->get('timespan');
+		$selected_office = $this->input->get('selected_office');
+		$selected_field = $this->input->get('selected_field');
 		
 		$big_categories = $this->make_up_big_categories();
 		if ($big_category_name == FALSE) {
@@ -56,6 +58,43 @@ class News extends CI_Controller {
 				$article = $this->article_model->get_article($article_id);
 			}
 		} elseif ($medium_category_name == 'TV') {
+			$offices = $this->make_up_offices();
+			$fields = $this->make_up_fields();
+			if ($article_id == FALSE) {
+				if ($selected_office != FALSE) {
+					$articles_dates = $this->daycount_model->get_dates();
+					if ($date == FALSE) {
+						$date = $articles_dates[0]->day;
+					}
+					if ($page == FALSE) {
+						$page = 1;
+					}
+					$articles = $this->article_model->get_office_articles($selected_office, $date, $page);
+				} elseif ($selected_field != FALSE) {
+					$articles_dates = $this->daycount_model->get_dates();
+					if ($date == FALSE) {
+						$date = $articles_dates[0]->day;
+					}
+					if ($page == FALSE) {
+						$page = 1;
+					}
+					$articles = $this->article_model->get_field_articles($this->category_model->get_category_id($selected_field), $date, $page);
+				} else {
+					$count = 4;
+					$tv_articles = $this->article_model->get_tv_articles($this->category_model->get_category_id('정치'), $count);
+					$tv_articles = array_merge($tv_articles, $this->article_model->get_tv_articles($this->category_model->get_category_id('경제'), $count));
+					$tv_articles = array_merge($tv_articles, $this->article_model->get_tv_articles($this->category_model->get_category_id('사회'), $count));
+					$tv_articles = array_merge($tv_articles, $this->article_model->get_tv_articles($this->category_model->get_category_id('생활/문화'), $count));
+					$tv_articles = array_merge($tv_articles, $this->article_model->get_tv_articles($this->category_model->get_category_id('세계'), $count));
+					$tv_articles = array_merge($tv_articles, $this->article_model->get_tv_articles($this->category_model->get_category_id('IT/과학'), $count));
+					$tv_articles = array_merge($tv_articles, $this->article_model->get_tv_articles($this->category_model->get_category_id('연예'), $count));
+					$tv_articles = array_merge($tv_articles, $this->article_model->get_tv_articles($this->category_model->get_category_id('스포츠'), $count));
+					$tv_articles = array_merge($tv_articles, $this->article_model->get_tv_articles($this->category_model->get_category_id('날씨'), $count));
+				}
+			} else {
+				// 개별 기사 화면
+				$article = $this->article_model->get_article($article_id);
+			}
 		} elseif ($medium_category_name != FALSE) {
 			$medium_category_id = $this->category_model->get_category_id($medium_category_name);
 			$small_categories = $this->make_up_small_categories($medium_category_id);
@@ -90,6 +129,9 @@ class News extends CI_Controller {
 		$data['page'] = $page;
 		$data['big_categories'] = $big_categories;
 		$data['medium_categories'] = $medium_categories;
+		$data['timespan'] = $timespan;
+		$data['selected_office'] = $selected_office;
+		$data['selected_field'] = $selected_field;
 		if (isset($small_categories)) {
 			$data['small_categories'] = $small_categories;
 		}
@@ -99,9 +141,6 @@ class News extends CI_Controller {
 		if (isset($articles_dates)) {
 			$data['articles_dates'] = $articles_dates;
 		}
-		if (isset($timespan)) {
-			$data['timespan'] = $timespan;
-		}
 		if (isset($small_clusters)) {
 			$data['small_clusters'] = $small_clusters;
 		}
@@ -110,6 +149,15 @@ class News extends CI_Controller {
 		}
 		if (isset($article)) {
 			$data['article'] = $article;
+		}
+		if (isset($offices)) {
+			$data['offices'] = $offices;
+		}
+		if (isset($fields)) {
+			$data['fields'] = $fields;
+		}
+		if (isset($tv_articles)) {
+			$data['tv_articles'] = $tv_articles;
 		}
 		
 		$this->load->view('templates/header', $data);
@@ -229,6 +277,40 @@ class News extends CI_Controller {
 		}
 	}
 	
+	private function make_up_offices() {
+		$offices = array();
+		$offices[] = (object) array('name' => 'KBS TV');
+		$offices[] = (object) array('name' => 'MBC TV');
+		$offices[] = (object) array('name' => 'MBN');
+		$offices[] = (object) array('name' => 'YTN TV');
+		$offices[] = (object) array('name' => 'SBS TV');
+		$offices[] = (object) array('name' => 'SBS CNBC TV');
+		$offices[] = (object) array('name' => 'TV조선');
+		$offices[] = (object) array('name' => '연합뉴스 TV');
+		$offices[] = (object) array('name' => '채널A');
+		$offices[] = (object) array('name' => '한국경제TV');
+		$offices[] = (object) array('name' => 'enews24');
+		$offices[] = (object) array('name' => 'JTBC TV');
+		$offices[] = (object) array('name' => 'KBS 연예');
+		$offices[] = (object) array('name' => 'SBS E!');
+		$offices[] = (object) array('name' => 'OBS TV');
+		return $offices;
+	}
+	
+	private function make_up_fields() {
+		$fields = array();
+		$fields[] = (object) array('name' => '정치');
+		$fields[] = (object) array('name' => '경제');
+		$fields[] = (object) array('name' => '사회');
+		$fields[] = (object) array('name' => '생활/문화');
+		$fields[] = (object) array('name' => '세계');
+		$fields[] = (object) array('name' => 'IT/과학');
+		$fields[] = (object) array('name' => '연예');
+		$fields[] = (object) array('name' => '스포츠');
+		$fields[] = (object) array('name' => '날씨');
+		return $fields;
+	}
+	
 	public function set_small_clusters($small_clusters, $num_small_clusters)
 	{
 		if (count($small_clusters) > $num_small_clusters) {
@@ -245,7 +327,6 @@ class News extends CI_Controller {
 	public function create_small_clusters()
 	{
 		$articles = $this->article_model->get_pc_hotissue1();
-		echo count($articles);
 		foreach ($articles as $article) {
 			$medium_category_id = $this->article_model->get_medium_category_id($article->id);
 			if ($medium_category_id != FALSE) {

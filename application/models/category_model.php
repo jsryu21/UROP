@@ -69,7 +69,7 @@ class Category_model extends CI_Model {
 			   'medium_category_id' => $medium_category_id
 			);
 			
-			$this->db->insert('medium_category_num_small_clusters', $data); 
+			$this->db->insert('medium_category_num_small_clusters', $data);
 		}
 	}
 	
@@ -95,7 +95,7 @@ class Category_model extends CI_Model {
 			   'medium_category_name' => $medium_category_name
 			);
 			
-			$this->db->insert('medium_category_num_small_clusters_exc', $data); 
+			$this->db->insert('medium_category_num_small_clusters_exc', $data);
 		}
 	}
 	

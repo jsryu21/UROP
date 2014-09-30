@@ -20,6 +20,56 @@ class Article_model extends CI_Model {
 		return $query->result();
 	}
 	
+	public function get_tv_articles($category_id, $count)
+	{
+		if (!isset($category_id)) {
+			return FALSE;
+		} elseif (!isset($count)) {
+			return FALSE;
+		}
+		
+		$this->db->from('article_categories');
+		$this->db->join('nv_articles', 'article_categories.article_id = nv_articles.id');
+		$this->db->where('article_categories.category_id', $category_id);
+		$this->db->where('type', 'video');
+		$this->db->limit($count, 0);
+		$query = $this->db->get();
+		return $query->result();
+	}
+	
+	public function get_field_articles($category_id, $date, $page)
+	{
+		if (!isset($category_id)) {
+			return FALSE;
+		} elseif (!isset($date)) {
+			return FALSE;
+		} elseif (!isset($page)) {
+			return FALSE;
+		}
+		
+		$this->db->from('article_categories');
+		$this->db->join('nv_articles', 'article_categories.article_id = nv_articles.id');
+		$this->db->where('date_format(service_time,"%Y-%m-%d")', $date);
+		$this->db->where('article_categories.category_id', $category_id);
+		$this->db->where('type', 'video');
+		$this->db->limit(20, $page * 20 - 20);
+		$query = $this->db->get();
+		return $query->result();
+	}
+	
+	public function get_office_articles($office_name, $date, $page)
+	{
+		if (!isset($office_name)) {
+			return FALSE;
+		}
+		
+		$this->db->from('nv_articles');
+		$this->db->where(array('office_name' => $office_name, 'date_format(service_time,"%Y-%m-%d")' => $date, 'type' => 'video'));
+		$this->db->limit(20, $page * 20 - 20);
+		$query = $this->db->get();
+		return $query->result();
+	}
+	
 	public function get_medium_category_id($article_id)
 	{
 		if (!isset($article_id)) {
